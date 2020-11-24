@@ -51,7 +51,7 @@ Color World::colour(Ray& ray)
         Vector3D N = normal;
         Vector3D I = -v;
         double R = 1.0;
-        double EPS = 0.00001;
+        double epsilon = 0.00001;
 
 
         if(kt>0)
@@ -87,7 +87,7 @@ Color World::colour(Ray& ray)
                 Vector3D refraction_direction = n * I - (n * incident_cos + trans_cos) * N;
                 refraction_direction.normalize();
 
-                Vector3D refr_origin = point + EPS * refraction_direction;
+                Vector3D refr_origin = point + epsilon * refraction_direction;
                 Ray refr_ray(refr_origin, refraction_direction);
 
 
@@ -237,8 +237,7 @@ Color World::shade_ray(Ray& ray, int recur)
             v.normalize();
             Vector3D N = normal;
             Vector3D I = -v;
-            double R = 1.0;
-            double EPS = 0.001;
+            double epsilon = 0.001;
             Color reflected_color = 0;
 
             if(ks > 0)
@@ -279,28 +278,31 @@ Color World::shade_ray(Ray& ray, int recur)
                 double incident_cos = dotProduct(I,N);
                 double sin_square = (1.0 - (incident_cos * incident_cos));
                 sin_square = n*n*sin_square;
+                double incident_sin = sqrt(sin_square);
 
-                if (sin_square <= 1)
+                if (incident_sin <= 1)
                 {
                     double trans_cos = sqrt(1.0 - sin_square);
 
-                    double val = 1 - ((n*n) * (1 - (product * product)));
-                    Vector3D refraction_dir = (n * (-v - (normal*(product)))) - (normal * sqrt(val));
+                    double val = (1 - (incident_cos * incident_cos));
+                    val = 1 - (pow(n,2.0) * val);
+
+                    Vector3D refraction_dir = (n * (I - (normal*incident_cos))) - (normal * sqrt(val));
                     refraction_dir.normalize();
                     Ray refr_ray(point, refraction_dir);
 
-                    double Rs = (n1 * incident_cos - n2 * trans_cos) / (n1 * incident_cos + n2 * trans_cos);
-                    double Rp = (n1 * trans_cos - n2 * incident_cos) / (n1 * trans_cos + n2 * incident_cos);
-                    R = (Rs * Rs + Rp * Rp) / 2.0;
+                    double Rs = pow((n1*incident_cos - n2*trans_cos) / (n1*incident_cos + n2*trans_cos), 2.0);
+                    double Rp = pow((n1*trans_cos - n2*incident_cos) / (n1*trans_cos + n2*incident_cos), 2.0);
+                    double fresnal = (Rs+Rp) / 2.0;
 
                     refraction_color = shade_ray(refr_ray, recur+1);
-                    refraction_color.R((1.0 - R)*refraction_color.R());
-                    refraction_color.G((1.0 - R)*refraction_color.G());
-                    refraction_color.B((1.0 - R)*refraction_color.B());
+                    refraction_color.R((1.0 - fresnal)*refraction_color.R());
+                    refraction_color.G((1.0 - fresnal)*refraction_color.G());
+                    refraction_color.B((1.0 - fresnal)*refraction_color.B());
 
-                    reflected_color.R(R*reflected_color.R());
-                    reflected_color.G(R*reflected_color.G());
-                    reflected_color.B(R*reflected_color.B());
+                    reflected_color.R(fresnal*reflected_color.R());
+                    reflected_color.G(fresnal*reflected_color.G());
+                    reflected_color.B(fresnal*reflected_color.B());
                     final_color = final_color + (refraction_color + reflected_color);
 
                 }
@@ -338,7 +340,7 @@ Color World::shade_ray(Ray& ray, int recur)
         	Vector3D N = normal;
         	Vector3D I = -v;
         	double R = 1.0;
-        	double EPS = 0.00001;
+        	double epsilon = 0.00001;
 
 
         	if(kt>0)
@@ -374,7 +376,7 @@ Color World::shade_ray(Ray& ray, int recur)
 					Vector3D refraction_direction = n * I - (n * incident_cos + trans_cos) * N;
 					refraction_direction.normalize();
 
-					Vector3D refr_origin = point + EPS * refraction_direction;
+					Vector3D refr_origin = point + epsilon * refraction_direction;
 					Ray refr_ray(refr_origin, refraction_direction);
 
 
