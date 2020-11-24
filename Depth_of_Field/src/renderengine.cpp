@@ -49,7 +49,6 @@ Color RenderEngine::Depth(Color color, Ray &primaryRay){
         //create for every ray created
         Ray DOFRay(origin, focal_point-origin);
         Color c = world->shade_ray(DOFRay);
-        c.clamp();
         R += c.r;
         G += c.g;
         B += c.b;
