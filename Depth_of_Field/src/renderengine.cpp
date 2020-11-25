@@ -43,9 +43,18 @@ Color RenderEngine::Depth(Color color, Ray &primaryRay){
     float B = 0.0f;
     for (int i = 0; i < rays; i++) {
         //distributed rays will be scattered about the lens of the camera
-        float radius = (float)(rand())/(float)(RAND_MAX/aperture);
-        float phi = (float)(rand())/(float)(RAND_MAX/360);
-        Vector3D origin = Vector3D(eye.X()+radius*cos(phi*PI/180),eye.Y()+radius*sin(phi*PI/180),eye.Z());
+        random_device generator;
+        uniform_real_distribution<double> distribution(0.0,aperture);
+        float radius = distribution(generator);
+        // std::cout << radius;
+        random_device generator2;
+        uniform_real_distribution<double> distrib(0.0,360.0);
+        float phi = distrib(generator2);
+        // std::cout << phi << std::endl;
+        float x = eye.X()+radius*cos(phi*PI/180);
+        float y = eye.Y()+radius*sin(phi*PI/180);
+        float z = eye.Z();
+        Vector3D origin = Vector3D(x,y,z);
         //create for every ray created
         Ray DOFRay(origin, focal_point-origin);
         Color c = world->shade_ray(DOFRay);
