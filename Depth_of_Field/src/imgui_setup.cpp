@@ -72,7 +72,7 @@ GLFWwindow* setupWindow(int width, int height)
 
     // Create window with graphics context
     glfwWindowHint(GLFW_SAMPLES, 4);
-    GLFWwindow* window = glfwCreateWindow(width, height, "Assignment 03", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(width, height, "Depth of Field", NULL, NULL);
     if (window == NULL)
         exit(0);
     glfwMakeContextCurrent(window);
