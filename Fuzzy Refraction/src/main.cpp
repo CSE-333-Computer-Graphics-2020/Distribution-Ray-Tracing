@@ -1,4 +1,3 @@
-// Assignment 03: Raytracing
 
 #include "imgui_setup.h"
 #include "camera.h"
@@ -50,14 +49,14 @@ int main(int, char**)
     m->ka = 0.4;
     m->kd = 0.6;
     m->ks = 0.5;
-    m->kr = 0.3;
-    m->kt = 0.2;
-    m->eta = 1.3;
+    // m->kr = 0.3;
+    // m->kt = 0.2;
+    // m->eta = 1.05;
 
 
 
 
-    Object *sphere = new Sphere(Vector3D(5, 0, -8), 4, m);
+    Object *sphere = new Sphere(Vector3D(5, 0, -8), 3, m);
     world->addObject(sphere);
     
     Material *m1 = new Material(world);
@@ -65,13 +64,25 @@ int main(int, char**)
     m1->ka = 0.3;
     m1->kd = 0.5;
     m1->ks = 0.3;
-    m1->kr = 0.3;
-    m1->kt = 0.2;
-    m1->eta = 1.1;
-
+    // m1->kr = 0.3;
+    // m1->kt = 0.2;
+    // m1->eta = 1.1;
     
     Object *sphere1 = new Sphere(Vector3D(-5, 0, -8), 3, m1);
     world->addObject(sphere1);
+
+    Material *m2 = new Material(world);
+    m2->color = Color(1.0, 0.0, 0.0);
+    m2->ka = 0.3;
+    m2->kd = 0.5;
+    m2->ks = 0.3;
+    m2->kr = 0.3;
+    m2->kt = 0.2;
+    m2->eta = 1.01;
+
+    Object *sphere2 = new Sphere(Vector3D(0, 0, 2), 2, m2);
+    world->addObject(sphere2);
+    
    
    // Triangle
     // Object *triangle = new Triangle(Vector3D(-2, -2, 0), Vector3D(2, -2, 0), Vector3D(0, 2, 0), m);
@@ -80,7 +91,7 @@ int main(int, char**)
     // Object *triangle1 = new Triangle(Vector3D(1, -1, 3), Vector3D(1, -1, 3), Vector3D(0, 1, 3), m1);
     // world->addObject(triangle1);
 
-    LightSource *light = new PointLightSource(world, Vector3D(0, -20, 0), Color(1, 1, 1));
+    LightSource *light = new PointLightSource(world, Vector3D(2, -15, 4), Color(1, 1, 1));
     world->addLight(light);
 
     engine = new RenderEngine(world, camera);
