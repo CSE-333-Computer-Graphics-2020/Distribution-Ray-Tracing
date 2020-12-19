@@ -53,7 +53,7 @@ int main(int, char**)
     //Create a world
     World *world = new World;
     world->setAmbient(Color(1));
-    world->setBackground(Color(0.1, 0.1, 0.1));
+    world->setBackground(Color(1.0, 1.0, 1.0));
     
     Material *m = new Material(world);
     m->color = Color(0.1, 0.7, 0.0);
